@@ -61,8 +61,8 @@ class TicTacToe:
     def empty_squares(self):
         return ' ' in self.board
 
-    def _num_empty_squares(self):
-        self.board.count(' ')
+    def num_empty_squares(self):
+        return self.board.count(' ')
 
     def make_move(self, square, letter):
         if self.board[square] == ' ':
@@ -135,15 +135,21 @@ class Unbeatable_Computer(Player):
             square = random.choice(game.available_moves())
         else:
             square = self.minimax(game, self.letter)
-        return square
+        return square['position']
 
     def minimax(self, game_state, player):
         max_player = self.letter
         min_player = 'o' if player == 'X' else 'X'
+        score = 0
 
         if game_state.winner == min_player:
-            return {'position': None,
-                    'score': 1 * (game_state.num_empty_squares() + 1) if min_player == max_player else -1 * (game_state.num_empty_squares() + 1)
+            if min_player == max_player:
+                score = 1 * (game_state.num_empty_squares() + 1)
+            else:
+                score = -1 * (game_state.num_empty_squares() + 1)
+            return {
+                'position': None,
+                'score': score
             }
         elif not game_state.empty_squares():
             return {'position': None, 'score': 0}
