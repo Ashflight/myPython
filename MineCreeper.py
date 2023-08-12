@@ -7,6 +7,7 @@ class Board:
         self.dimensions = dimensions
         self.bombs = bombs
         self.dug = set()
+        self.marked = set()
         self.board = self.generate_board()
         self.assign_values()
 
@@ -48,6 +49,8 @@ class Board:
             for col in range(0, self.dimensions):
                 if (row, col) in self.dug:
                     visible_board[row][col] = str(self.board[row][col])
+                elif (row, col) in self.marked:
+                    visible_board[row][col] = "X"
                 else:
                     visible_board[row][col] = " "
         return visible_board
@@ -69,11 +72,11 @@ class Board:
 
     def mark(self, board, r, c):
         if board[r][c] == " ":
+            self.marked.add((r, c))
             board[r][c] = "X"
         else:
             print("Invalid move, try again.")
         return board
-    # fix bug where Xs don't stay after multiple turns. Need to put X on full board.
 
     def print_board(self, board):
         for item_row in board:
