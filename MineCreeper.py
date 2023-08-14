@@ -91,17 +91,20 @@ def play(dimensions, bombs):
         board.print_board(visible_board)
         print("Where would you like to dig?")
         print("Please input as \"row, column\". Input a X between the two coordinates if you wish to mark a block.")
-        move = re.split(',(\\s)*', input("Input your move here: "))
-        row = int(move[0])
-        col = int(move[-1])
-        if row < 0 or row >= board.dimensions or col < 0 or col >= board.dimensions:
-            print("Invalid move, try again.")
-            continue
-        elif "X" in move:
-            board.mark(visible_board, row, col)
-        else:
-            safe = board.dig(row, col)
-            visible_board = board.get_visible_board()
+        try:
+            move = re.split(',(\\s)*', input("Input your move here: "))
+            row = int(move[0])
+            col = int(move[-1])
+            if row < 0 or row >= board.dimensions or col < 0 or col >= board.dimensions:
+                print("Invalid move, try again.")
+                continue
+            elif "X" in move or "x" in move:
+                board.mark(visible_board, row, col)
+            else:
+                safe = board.dig(row, col)
+                visible_board = board.get_visible_board()
+        except:
+            print("Invalid move, please try again.")
         if not safe:
             break
     if safe:
@@ -118,4 +121,7 @@ if __name__ == '__main__':
     print("Welcome to MineCreeper!")
     d = int(input("Input the dimensions for your (square) mine: "))
     b = int(input("Enter the number of creepers for this round: "))
-    play(d, b)
+    if b < d**2:
+        play(d, b)
+    else:
+        print("Please enter less creepers than you have blocks in your mine.")
