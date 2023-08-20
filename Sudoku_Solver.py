@@ -1,5 +1,5 @@
 import copy
-from Sudoku_Generator import random_sample
+# from Sudoku_Generator import random_sample
 
 
 def get_first_space(puzzle):
@@ -32,19 +32,19 @@ def is_valid(puzzle, guess, row_num, col_num):
 
 
 def solve_sudoku(puzzle):
-    backup_puzzle = copy.deepcopy(puzzle)
+    # backup_puzzle = copy.deepcopy(puzzle)
     space = get_first_space(puzzle)
     if space is None:
         return True
     else:
         for number in range(1, 10):
-            if is_valid(backup_puzzle, number, space[0], space[1]):
-                backup_puzzle[space[0]][space[1]] = number
-                if solve_sudoku(backup_puzzle):
-                    puzzle[space[0]][space[1]] = number
+            if is_valid(puzzle, number, space[0], space[1]):
+                puzzle[space[0]][space[1]] = number
+                if solve_sudoku(puzzle):
+                    # puzzle[space[0]][space[1]] = number
                     return True
-                # else:
-                #     puzzle[space[0]][space[1]] = 0
+                else:
+                    puzzle[space[0]][space[1]] = 0
             # puzzle = backup_puzzle
     return False
 
@@ -55,6 +55,7 @@ def samples(input_string1, replacement):
         new_string = input_string1[:i] + replacement + input_string1[i + len(replacement):]
         result.append(new_string)
     return result
+
 
 if __name__ == '__main__':
     print("Welcome to Meow Cat's Sudoku Solver.")
@@ -68,8 +69,8 @@ if __name__ == '__main__':
     # for i in range(100):
     #     replace = 25
     #     input_string = random_sample(input_string1, replace)
-        # for input_string in samples(input_string1, replacement):
-    print(input_string)
+    # for input_string in samples(input_string1, replacement):
+    # print(input_string)
     solved_board = []
     for r in range(9):
         row = []
