@@ -1,4 +1,3 @@
-import math
 import random
 import pygame
 import tkinter as tk
@@ -116,12 +115,12 @@ class snake(object):
                 c.draw(surface)
 
 
-def draw_grid(w, rows, surface):
-    size_between = width // rows
+def draw_grid(w, r, surface):
+    size_between = width // r
 
     x = 0
     y = 0
-    for l in range(rows):
+    for l in range(r):
         x += size_between
         y += size_between
 
