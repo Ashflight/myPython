@@ -14,6 +14,14 @@ class Stone:
         pygame.draw.circle(surface, self.color, center, 25)
 
 
+def check(location1, location2, location3, location_list, color):
+    if location1 in location_list and location2 in location_list and location3 in location_list:
+        if color == (255, 0, 0):
+            message_box("Red wins!", "The game has finished with red winning.")
+        else:
+            message_box("Yellow wins!", "The game has finished with yellow winning.")
+
+
 def on_key_event(e):
     global stones, valid_move
     valid_move = True
@@ -42,26 +50,10 @@ def on_key_event(e):
             if new_stone.color == stone.color:
                 stone_positions.append(stone.position)
         for position in stone_positions:
-            if (position[0]+1, position[1]) in stone_positions and (position[0]+2, position[1]) in stone_positions and (position[0]+3, position[1]) in stone_positions:
-                if new_stone.color == (255, 0, 0):
-                    message_box("Red wins!", "The game has finished with red winning.")
-                else:
-                    message_box("Yellow wins!", "The game has finished with yellow winning.")
-            elif (position[0], position[1]+1) in stone_positions and (position[0], position[1]+2) in stone_positions and (position[0], position[1]+3) in stone_positions:
-                if new_stone.color == (255, 0, 0):
-                    message_box("Red wins!", "The game has finished with red winning.")
-                else:
-                    message_box("Yellow wins!", "The game has finished with yellow winning.")
-            elif (position[0]+1, position[1]+1) in stone_positions and (position[0]+2, position[1]+2) in stone_positions and (position[0]+3, position[1]+3) in stone_positions:
-                if new_stone.color == (255, 0, 0):
-                    message_box("Red wins!", "The game has finished with red winning.")
-                else:
-                    message_box("Yellow wins!", "The game has finished with yellow winning.")
-            elif (position[0]-1, position[1]+1) in stone_positions and (position[0]-2, position[1]+2) in stone_positions and (position[0]-3, position[1]+3) in stone_positions:
-                if new_stone.color == (255, 0, 0):
-                    message_box("Red wins!", "The game has finished with red winning.")
-                else:
-                    message_box("Yellow wins!", "The game has finished with yellow winning.")
+            check((position[0] + 1, position[1]), (position[0] + 2, position[1]), (position[0] + 3, position[1]), stone_positions, new_stone.color)
+            check((position[0], position[1] + 1), (position[0], position[1] + 2), (position[0], position[1] + 3), stone_positions, new_stone.color)
+            check((position[0] + 1, position[1] + 1), (position[0] + 2, position[1] + 2), (position[0] + 3, position[1] + 3), stone_positions, new_stone.color)
+            check((position[0] + 1, position[1] - 1), (position[0] + 2, position[1] - 2), (position[0] + 3, position[1] - 3), stone_positions, new_stone.color)
         if len(stones) >= 42:
             message_box("Tie.", "The game has finished with a tie.")
         if valid_move:
@@ -81,17 +73,16 @@ def draw_board(w, r, surface):
     for l in range(r):
         x += size_between
         y += size_between
-
         pygame.draw.line(surface, (255, 255, 255), (x, size_between), (x, w))
         pygame.draw.line(surface, (255, 255, 255), (0, y), (w, y))
 
 
-def redraw_window(w, window, stones):
-    window.fill((0, 0, 0))
-    draw_board(w, 7, window)
-    for number in range(len(stones)):
-        placed_stone = stones[number]
-        placed_stone.draw(window)
+def redraw_window(w, surface, stone_list):
+    surface.fill((0, 0, 0))
+    draw_board(w, 7, surface)
+    for number in range(len(stone_list)):
+        placed_stone = stone_list[number]
+        placed_stone.draw(surface)
     pygame.display.update()
 
 
@@ -111,8 +102,8 @@ width = 350
 window = pygame.display.set_mode((width, width))
 stones = []
 clock = pygame.time.Clock()
-new_stone = Stone((255, 255, 0), (3, 0))
-stones.append(new_stone)
+first_stone = Stone((255, 255, 0), (3, 0))
+stones.append(first_stone)
 valid_move = True
 
 keyboard.hook(on_key_event)
