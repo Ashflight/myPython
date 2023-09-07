@@ -2,7 +2,7 @@ import pygame
 import tkinter as tk
 from tkinter import messagebox
 import keyboard
-
+import sys
 
 class Stone:
     def __init__(self, color, position):
@@ -23,14 +23,17 @@ def check_internal(location1, location2, location3, location_list, color):
 
 
 def on_key_event(e):
+    if e.event_type != keyboard.KEY_UP:
+        return
+
     global stones, valid_move
     valid_move = True
     new_stone = stones[-1]
-    if e.event_type == keyboard.KEY_UP and e.name == "left":
+    if e.name == "left":
         move_left(new_stone)
-    elif e.event_type == keyboard.KEY_UP and e.name == "right":
+    elif e.name == "right":
         move_right(new_stone)
-    elif e.event_type == keyboard.KEY_UP and e.name == "down":
+    elif e.name == "down":
         move_down(new_stone, stones)
         check_win(new_stone, stones)
         check_tie(stones)
@@ -38,6 +41,10 @@ def on_key_event(e):
             add_stone(new_stone, stones)
         else:
             message_box("Invalid Move", "Please move to a column that is not full.")
+    elif e.name == 'q':
+        print("received q")
+        pygame.event.post(pygame.event.Event(pygame.QUIT))
+
     redraw_window(window.get_width(), window, stones)
 
 
@@ -137,5 +144,16 @@ valid_move = True
 keyboard.hook(on_key_event)
 
 redraw_window(width, window, stones)
-while True:
-    pass
+
+
+quit_game = False
+while not quit_game:
+    pygame.time.delay(50)
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            quit_game = True
+
+
+print("received quit event")
+pygame.quit()
+sys.exit()
